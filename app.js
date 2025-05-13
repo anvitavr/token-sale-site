@@ -1,7 +1,14 @@
 let provider, signer, contract;
 
-const saleAddress = "0x1Af09E58aD5704a8679e677d05d2E447B527680B"; // Your sale contracts address
-const saleAbi = [
+ 
+
+// Replace with your actual deployed SCTSale contract address
+
+const contractAddress = "0x1Af09E58aD5704a8679e677d05d2E447B527680B"; // STCSale
+
+const contractABI = [  // simplified ABI just for `buyTokens` function
+
+
 	{
 		"inputs": [],
 		"name": "buyTokens",
@@ -145,21 +152,58 @@ const saleAbi = [
 	}
 ];
 
+ 
+
 async function connectWallet() {
+
   if (window.ethereum) {
-    await window.ethereum.request({ method: "eth_requestAccounts" });
+
     provider = new ethers.BrowserProvider(window.ethereum);
+
     signer = await provider.getSigner();
-    contract = new ethers.Contract(saleAddress, saleAbi, signer);
-    alert("Wallet connected!");
+
+    contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    alert("Wallet connected: " + signer.address);
+
   } else {
-    alert("Please install MetaMask.");
+
+    alert("Please install MetaMask!");
+
   }
+
 }
 
+ 
+
 async function buyTokens() {
-  const ethAmount = document.getElementById("ethAmount").value;
-  const tx = await contract.buyTokens({ value: ethers.parseEther(ethAmount) });
-  await tx.wait();
-  alert("Tokens purchased!");
+
+  const ethInput = document.getElementById("ethAmount").value;
+
+  if (!ethInput || isNaN(ethInput)) return alert("Enter valid ETH amount");
+
+ 
+
+  const ethValue = ethers.parseEther(ethInput.toString());
+
+ 
+
+  try {
+
+    const tx = await contract.buyTokens({ value: ethValue });
+
+    alert("Transaction sent: " + tx.hash);
+
+    await tx.wait();
+
+    alert("Transaction confirmed!");
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Transaction failed: " + (err?.message || err));
+
+  }
+
 }
