@@ -979,7 +979,7 @@ const saleAbi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+
   "function buyTokens() payable",
   "function rate() view returns (uint256)"
 ];
