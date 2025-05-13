@@ -1,4 +1,5 @@
 let provider, signer, contract;
+
 const saleAddress = "0x1Af09E58aD5704a8679e677d05d2E447B527680B"; // Your sale contracts address
 const saleAbi = [
 	{
@@ -142,7 +143,7 @@ const saleAbi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+];
 
 async function connectWallet() {
   if (window.ethereum) {
